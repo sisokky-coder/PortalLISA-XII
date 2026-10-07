@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PORTAL KONTEN LISA</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #4f46e5;
+      --secondary-color: #06b6d4;
+      --accent-color: #f43f5e;
+      --text-main: #1e1b4b;
+      --text-muted: #475569;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f1f5f9; 
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 1000px;
+      min-height: 85vh;
+      background: #ffffff; 
+      border: 1px solid #e2e8f0;
+      border-radius: 28px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      padding: 24px;
+      margin: 20px auto;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    @media (max-width: 576px) {
+      .app-container {
+        padding: 16px;
+        margin: 10px;
+        border-radius: 20px;
+        min-height: 90vh;
+      }
+    }
+
+    .page {
+      display: none;
+      animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      z-index: 2;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 24px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .page-title {
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin: 0;
+      flex-grow: 1;
+      text-align: center;
+    }
+
+    .btn-back {
+      background: #ffffff;
+      border: 2px solid #e2e8f0;
+      color: #4f46e5;
+      border-radius: 20px;
+      padding: 8px 18px;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .btn-back:hover {
+      background: #4f46e5;
+      color: #ffffff;
+      border-color: #4f46e5;
+      transform: translateX(-3px);
+    }
+
+    @media (max-width: 576px) {
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      .page-title {
+        text-align: left;
+        width: 100%;
+        font-size: 1.5rem;
+      }
+    }
+
+    #page-landing {
+      padding: 40px 20px;
+      border-radius: 24px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(238, 242, 255, 0.8) 0%, rgba(252, 231, 243, 0.8) 100%);
+      box-shadow: inset 0 0 40px rgba(255, 255, 255, 0.8);
+    }
+
+    #page-landing::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background-image: 
+        linear-gradient(rgba(79, 70, 229, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79, 70, 229, 0.08) 1px, transparent 1px);
+      background-size: 32px 32px;
+      transform: perspective(500px) rotateX(60deg);
+      animation: gridMove 25s linear infinite;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    @keyframes gridMove {
+      0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+      100% { transform: perspective(500px) rotateX(60deg) translateY(32px); }
+    }
+
+    .landing-glowing-orb {
+      position: absolute;
+      top: 35%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(244, 63, 94, 0.3) 0%, rgba(6, 182, 212, 0.25) 50%, rgba(255,255,255,0) 70%);
+      filter: blur(45px);
+      border-radius: 50%;
+      z-index: 0;
+      animation: orbPulse 4s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes orbPulse {
+      0% { transform: translate(-50%, -50%) scale(0.85); opacity: 0.7; }
+      100% { transform: translate(-50%, -50%) scale(1.25); opacity: 1; }
+    }
+
+    .video-hero-wrapper {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 25px;
+    }
+
+    .video-hero-icon {
+      width: 110px;
+      height: 110px;
+      background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 3.2rem;
+      margin: 0 auto;
+      box-shadow: 0 15px 35px rgba(236, 72, 153, 0.35);
+      position: relative;
+      animation: floatHero 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatHero {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-10px); }
+    }
+
+    .video-hero-badge {
+      position: absolute;
+      bottom: -10px;
+      right: -15px;
+      background: #06b6d4;
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      box-shadow: 0 6px 15px rgba(6, 182, 212, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* AREA JANGKAUAN KETUKAN LEBIH LUAS PADA HALAMAN MENU */
+    #page-menu {
+      padding: 20px;
+      margin: -20px;
+      min-height: 80vh;
+      cursor: pointer;
+    }
+
+    .btn-custom {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      color: #fff;
+      font-weight: 700;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 40px;
+      box-shadow: 0 10px 25px rgba(79, 70, 229, 0.35);
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .btn-custom:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 14px 30px rgba(124, 58, 237, 0.45);
+      color: #fff;
+    }
+
+    .menu-card {
+      border: none;
+      border-radius: 22px;
+      padding: 28px 18px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      z-index: 2;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .card-panduan {
+      background: linear-gradient(145deg, #e0f2fe 0%, #bae6fd 100%);
+      color: #0369a1;
+    }
+
+    .card-upload {
+      background: linear-gradient(145deg, #fce7f3 0%, #fbcfe8 100%);
+      color: #be185d;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 18px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .menu-card i {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      transition: transform 0.3s ease;
+    }
+
+    .menu-card:hover i {
+      transform: scale(1.15) rotate(6deg);
+    }
+
+    .menu-card h4 {
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .card-glass {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .form-control, .form-select {
+      background: #ffffff;
+      border: 2px solid #e2e8f0;
+      color: #1e1b4b;
+      border-radius: 12px;
+      padding: 10px 15px;
+      font-weight: 500;
+    }
+
+    .form-control:focus, .form-select:focus {
+      background: #ffffff;
+      border-color: #6366f1;
+      color: #1e1b4b;
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.18);
+    }
+
+    .student-chip {
+      display: inline-block;
+      background: #e0e7ff;
+      border: 1px solid #c7d2fe;
+      color: #3730a3;
+      padding: 7px 15px;
+      margin: 4px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .student-chip:hover {
+      background: #4f46e5;
+      color: #fff;
+      border-color: #4f46e5;
+      transform: translateY(-2px);
+    }
+
+    .student-selected-chip {
+      display: inline-flex;
+      align-items: center;
+      background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);
+      color: #fff;
+      padding: 7px 16px;
+      margin: 4px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(236, 72, 153, 0.3);
+    }
+
+    .student-selected-chip .btn-remove {
+      margin-left: 10px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    .student-selected-chip .btn-remove:hover {
+      color: #fce7f3;
+    }
+
+    .list-box {
+      min-height: 65px;
+      max-height: 160px;
+      overflow-y: auto;
+      border: 2px dashed #a5b4fc;
+      border-radius: 14px;
+      padding: 12px;
+      background: #ffffff;
+    }
+
+    .available-box {
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 12px;
+      background: #ffffff;
+    }
+
+    .title-gradient {
+      background: linear-gradient(135deg, #4f46e5 0%, #ec4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* KELAS SEMBUNYI UNTUK TOMBOL FASILITATOR */
+    .hidden-btn {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container app-container">
+
+  <!-- 1. HALAMAN AWAL / MUKA -->
+  <div id="page-landing" class="page active text-center">
+    <div class="landing-glowing-orb"></div>
+    <div class="my-auto py-4 position-relative" style="z-index: 2;">
+      <div class="video-hero-wrapper">
+        <div class="video-hero-icon">
+          <i class="fa-solid fa-film"></i>
+        </div>
+        <div class="video-hero-badge">
+          <i class="fa-solid fa-play"></i> Video Hub
+        </div>
+      </div>
+
+      <h1 class="fw-extrabold display-4 mb-3 title-gradient" style="font-weight: 900; letter-spacing: -1px;">PORTAL KONTEN LISA</h1>
+      <p class="lead mb-4 fw-bold text-slate-700 fs-5" style="letter-spacing: 0.5px;">Aplikasi Penilaian Konten Kreatif Siswa</p>
+      
+      <button class="btn btn-custom btn-lg" onclick="navigateTo('page-menu')">
+        MULAI <i class="fa-solid fa-circle-play ms-2"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- 2. HALAMAN MENU -->
+  <div id="page-menu" class="page" onclick="handleSecretTap(event)">
+    <div class="page-header">
+      <button class="btn btn-back" onclick="navigateTo('page-landing')">
+        <i class="fa-solid fa-arrow-left me-1"></i> Kembali
+      </button>
+      <h2 class="page-title title-gradient">MENU UTAMA</h2>
+      <div style="width: 100px;" class="d-none d-sm-block"></div>
+    </div>
+
+    <div class="row g-4 justify-content-center position-relative" style="z-index: 2;">
+      <div class="col-md-6">
+        <div class="menu-card card-panduan" onclick="navigateTo('page-panduan')">
+          <i class="fa-solid fa-book-open"></i>
+          <h4>PANDUAN MURID</h4>
+          <p class="small mb-0 opacity-75">Cara mengunggah link tautan konten video Anda.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="menu-card card-upload" onclick="navigateTo('page-upload')">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+          <h4>UPLOAD KONTEN</h4>
+          <p class="small mb-0 opacity-75">Formulir pengiriman karya video tugas Instagram.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOMBOL AKSES FASILITATOR (TERSEMBUNYI SECARA DEFAULT) -->
+    <div class="text-center mt-5 position-relative" style="z-index: 2;">
+      <button id="btnFasilitatorSecret" class="btn btn-outline-primary rounded-pill px-4 py-2 fw-bold shadow-sm hidden-btn" onclick="navigateTo('page-login-fasilitator')">
+        <i class="fa-solid fa-user-shield me-2"></i> Akses Fasilitator / Guru
+      </button>
+    </div>
+  </div>
+
+  <!-- 3. HALAMAN PANDUAN MURID -->
+  <div id="page-panduan" class="page">
+    <div class="page-header">
+      <button class="btn btn-back" onclick="navigateTo('page-menu')">
+        <i class="fa-solid fa-arrow-left me-1"></i> Kembali
+      </button>
+      <h3 class="page-title title-gradient">Panduan Pengunggahan Konten</h3>
+      <div style="width: 100px;" class="d-none d-sm-block"></div>
+    </div>
+
+    <div class="card-glass">
+      <ol class="lh-lg fw-semibold text-slate-700 m-0 ps-3">
+        <li>Unggah video tugas kelompok Anda ke platform <strong class="text-indigo-600">Instagram</strong>.</li>
+        <li>Pastikan pengaturan akun Instagram Anda bersifat <strong>Publik</strong> (tidak dikunci).</li>
+        <li>Gunakan fitur <strong>Invite Collaborator</strong> saat mengunggah postingan/Reels dan undang akun Instagram sekolah <strong class="text-indigo-600">@sman10depok.official</strong> sebagai kolaborator.</li>
+        <li>Salin link/tautan postingan video Instagram tersebut (Contoh: <code>https://www.instagram.com/p/Cxxxxxxx/</code> atau Reels).</li>
+        <li>Buka menu <strong class="text-pink-600">UPLOAD KONTEN</strong> pada aplikasi ini.</li>
+        <li>Pilih <strong>Kelas</strong>, isi <strong>Kelompok</strong>, klik nama siswa untuk memasukkan ke <strong>Nama Anggota Kelompok</strong>, ketik <strong>Judul Konten</strong>, lalu tempelkan <strong>Link Tautan</strong>.</li>
+        <li>Klik <strong>Kirim Konten</strong>. Data akan otomatis tersimpan dan diverifikasi oleh Fasilitator.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 4. HALAMAN UPLOAD KONTEN -->
+  <div id="page-upload" class="page">
+    <div class="page-header">
+      <button class="btn btn-back" onclick="navigateTo('page-menu')">
+        <i class="fa-solid fa-arrow-left me-1"></i> Kembali
+      </button>
+      <h3 class="page-title title-gradient">Formulir Upload Konten</h3>
+      <div style="width: 100px;" class="d-none d-sm-block"></div>
+    </div>
+
+    <div class="card-glass">
+      <form id="formUpload" onsubmit="handleUploadSubmit(event)">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-bold text-indigo-900">Kelas</label>
+            <select class="form-select" id="uploadKelas" onchange="handleKelasChange()" required>
+              <option value="">-- Pilih Kelas --</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold text-indigo-900">Kelompok</label>
+            <input type="text" class="form-control" id="uploadKelompok" placeholder="Contoh: Kelompok 1" required>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label fw-bold text-indigo-900">Nama Anggota Kelompok Terpilih:</label>
+            <div id="selectedAnggotaContainer" class="list-box">
+              <span class="text-muted small fw-normal" id="emptyAnggotaPlaceholder">Klik nama murid dari daftar di bawah untuk menambahkannya ke sini...</span>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label fw-bold text-indigo-900">Klik Nama Murid untuk Memilih:</label>
+            <div id="availableSiswaContainer" class="available-box">
+              <span class="text-muted small fw-normal">Silakan pilih kelas terlebih dahulu.</span>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label fw-bold text-indigo-900">Judul Konten</label>
+            <input type="text" class="form-control" id="uploadJudul" placeholder="Masukkan judul video..." required>
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-bold text-indigo-900">Link Tautan Instagram</label>
+            <input type="url" class="form-control" id="uploadLink" placeholder="https://www.instagram.com/reel/..." required>
+          </div>
+          <div class="col-12 text-center mt-4">
+            <button type="submit" id="btnSubmitUpload" class="btn btn-custom w-100">Kirim Konten</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 5. HALAMAN LOGIN FASILITATOR -->
+  <div id="page-login-fasilitator" class="page">
+    <div class="page-header">
+      <button class="btn btn-back" onclick="navigateTo('page-menu')">
+        <i class="fa-solid fa-arrow-left me-1"></i> Kembali
+      </button>
+      <h3 class="page-title title-gradient">Verifikasi Fasilitator</h3>
+      <div style="width: 100px;" class="d-none d-sm-block"></div>
+    </div>
+
+    <div class="card-glass mx-auto" style="max-width: 450px;">
+      <form id="formLoginFasilitator" onsubmit="handleLoginFasilitator(event)" autocomplete="off">
+        <div class="mb-3">
+          <label class="form-label fw-bold text-indigo-900">Nama Fasilitator</label>
+          <select class="form-select" id="loginFasilitatorNama" required></select>
+        </div>
+        <div class="mb-4">
+          <label class="form-label fw-bold text-indigo-900">Sandi Akses</label>
+          <input type="password" class="form-control" id="loginSandi" placeholder="Masukkan sandi..." autocomplete="new-password" required>
+        </div>
+        <button type="submit" class="btn btn-custom w-100">Masuk Portal</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 6. HALAMAN DASHBOARD FASILITATOR -->
+  <div id="page-dashboard-fasilitator" class="page">
+    <div class="page-header">
+      <button class="btn btn-back" onclick="handleLogout()">
+        <i class="fa-solid fa-arrow-right-from-bracket me-1"></i> Keluar
+      </button>
+      <h3 class="page-title title-gradient">Dashboard Fasilitator</h3>
+      <div style="width: 100px;" class="d-none d-sm-block"></div>
+    </div>
+
+    <p class="text-center text-slate-600 mb-3 fw-semibold" id="welcomeFasilitator"></p>
+
+    <!-- PANDUAN PENILAIAN FASILITATOR -->
+    <div class="card-glass mb-4">
+      <h5 class="fw-bold title-gradient mb-2"><i class="fa-solid fa-clipboard-check me-2"></i>Panduan Penilaian Fasilitator</h5>
+      <ol class="lh-base fw-semibold text-slate-700 mb-3 ps-3 small">
+        <li>Pilih <strong>Kelas</strong> pada menu filter di bawah untuk memuat daftar karya video siswa.</li>
+        <li>Klik tombol <strong>"Tonton & Nilai"</strong> pada karya kelompok yang ingin dinilai.</li>
+        <li>Tonton video tugas siswa dengan mengklik tautan <strong>"Putar Video di Instagram"</strong>.</li>
+        <li>Isi penilaian berdasarkan 4 kriteria (Pilihan: <em>C = Cukup, B = Baik, SB = Sangat Baik</em>).</li>
+        <li>Klik <strong>"Simpan Penilaian"</strong> untuk memperbarui data ke sistem Spreadsheet.</li>
+      </ol>
+
+      <div class="border-top pt-3 mt-2">
+        <h6 class="fw-bold text-indigo-900 mb-2"><i class="fa-solid fa-list-check me-2"></i>Rincian Indikator Penilaian:</h6>
+        <ul class="lh-base text-slate-700 mb-0 ps-3 small">
+          <li class="mb-2">
+            <strong>Akurasi Konten:</strong> Kesesuaian materi video dengan tema tugas, kedalaman pembahasan, kebenaran informasi/data yang disajikan, serta keterlibatan seluruh anggota kelompok dalam materi.
+          </li>
+          <li class="mb-2">
+            <strong>Kreativitas:</strong> Keunikan ide/konsep, orisinalitas penyampaian, penyusunan jalan cerita (storytelling), serta kejelasan alur penyampaian materi.
+          </li>
+          <li class="mb-2">
+            <strong>Kualitas Teknis:</strong> Kejelasan kualitas visual/gambar, pencahayaan, kejelasan audio/suara, serta kerapian proses pengeditan dan transisi video.
+          </li>
+          <li>
+            <strong>Komunikasi:</strong> Kejelasan intonasi dan artikulasi penyampaian, keaktifan interaksi para anggota di dalam video, kesopanan, serta penggunaan bahasa yang komunikatif dan efektif.
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row mb-4">
+      <div class="col-md-6 mx-auto">
+        <label class="form-label fw-bold text-indigo-900">Pilih Kelas untuk Penilaian:</label>
+        <select class="form-select" id="filterKelasFasilitator" onchange="renderKontenList()">
+          <option value="">-- Silakan Pilih Kelas --</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="daftarKontenContainer"></div>
+  </div>
+
+</div>
+
+<!-- Modal Penilaian & Pemutaran Video -->
+<div class="modal fade" id="modalPenilaian" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" style="background: #ffffff; color: #1e1b4b; border: 2px solid #e0e7ff; border-radius: 24px;">
+      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0;">
+        <h5 class="modal-title fw-bold title-gradient" id="modalTitle">Penilaian Konten</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3 text-center">
+          <a id="modalVideoLink" href="#" target="_blank" class="btn btn-outline-primary btn-lg rounded-pill fw-bold" style="border-color: #ec4899; color: #ec4899;">
+            <i class="fa-brands fa-instagram me-2"></i> Putar Video di Instagram
+          </a>
+        </div>
+        <form id="formPenilaian" onsubmit="handleSavePenilaian(event)">
+          <input type="hidden" id="penilaianRowIndex">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-bold">Akurasi & Kedalaman Konten</label>
+              <select class="form-select" id="nilaiAkurasi" required>
+                <option value="C">C (Cukup)</option>
+                <option value="B">B (Baik)</option>
+                <option value="SB">SB (Sangat Baik)</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-bold">Kreativitas & Daya Tarik</label>
+              <select class="form-select" id="nilaiKreativitas" required>
+                <option value="C">C (Cukup)</option>
+                <option value="B">B (Baik)</option>
+                <option value="SB">SB (Sangat Baik)</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-bold">Kualitas Teknis (Audio & Visual)</label>
+              <select class="form-select" id="nilaiTeknis" required>
+                <option value="C">C (Cukup)</option>
+                <option value="B">B (Baik)</option>
+                <option value="SB">SB (Sangat Baik)</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-bold">Komunikasi & Bahasa</label>
+              <select class="form-select" id="nilaiKomunikasi" required>
+                <option value="C">C (Cukup)</option>
+                <option value="B">B (Baik)</option>
+                <option value="SB">SB (Sangat Baik)</option>
+              </select>
+            </div>
+          </div>
+          <div class="mt-4 text-end">
+            <button type="submit" id="btnSubmitPenilaian" class="btn btn-custom">Simpan Penilaian</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzZ1B2RUd6rW64xhQrkiEo7u1KjOxSKxR7FoIA4ieIPIbFxvmniMB7EnFQaBFNRk3JwmQ/exec";
+
+  const FASILITATOR_LIST = ["Sri Murniati, S.Pd.","Firmansyah, S.Pd.","Rahmat, S.Ag., M.M","Margana, S.Pd.","Rohma Sri Astuti, S.T., M.Pd.","Eti Saptarini, S. Pd. Si., M.Pd.","Bheny Kisworo, S.Pd., M.I. Kom.","M. Solahuddin, S.Pd., M.H., M.M.","Erwan, M.Pd., M.Sas.","Heri, S.Kom.","Fitra Faturachman, S. Psi., M.Si.","Sri Wahyuni Lestari, S.Pd., M.M.","Gita Rani Putri Manggiri, M. Pd.","Sri Sumarsih, S.Pd., M.M.","Sukendar, S.E.","Erwin Bikanofa, S.Pd","Dina Meiliana, S.Pd.","Ahmad Firdaos, S.Pd","Desy Purwitasari, S.P.","Ibnu Fadhilah Prayoga, S.Pd.","Nofa Rina Anggraeni, S.Pd.","Risa Rosmalita, S.Psi.","Sansan Sumarna, S.Pd. I.","Gunardi, S.Pd.","Dra. Suryani","Nabila Nurul Isnaini, S.Pd.","Setia Rohani Kristina Pangaribuan, M.Si.","Tika Mufrika, S.Pd.","Amdani Darussalam, S.Pd.","Laily Hikmah, S.Pd.","Rusman Somantri, S.Pd.","Atikah, S.Pd","Oki Siswanto, M.Pd.","Tri Sutrisno, S.Pd.,M.I. kom.","Supriyadi, S.Pd.I., M.I. kom.","Muhamad Iman Sobirin, S.Pd.","Winda Harti, S.Pd.","Zulfa Nurdiana, S.Pd., M.Si.","Putri Nur Octavia, S.Pd.","Ravika Pratiwi, S.Pd.","Efan Yulistiyono, S. Pd.","Rahmat, S. Pd.","Purnama Nuraeni, S.Pd.","Irma Natalia Ariwei, S. Pd."];
+
+  const DATA_MURID = {
+    "XII 1": ["ABRAR PRATAMA PUTRA IBRAHIM", "Abyan Oktorio Nugroho Putra", "Ahmad Samy Jauhari", "Amalia Dzikra Avrilla Siregar", "Andriano Gerald Oloan Nainggolan", "Anggia Quena", "Arfani Nur Hapsari", "Aurelia Cinta Al Khaira", "Bima Eka Putra", "Corina Sabda Rifa Laloan", "Dafa Alfiantama", "Desniar Nindya Sagita", "Dinda Maishilla", "Dito Kamalsyah Yivni Putra", "Giuliano Muhammad Dezan", "Irham Fairuzzabadi", "Jaza Anil Chusna", "Keysha Aqeela Sutisna", "Malik Omar Putra Haryo", "Medina Kamila", "Muhamad Grunge Choirul Hygien P.A.", "Muhammad Fatih Arham", "Muhammad Hedar Julson Sutjiadi", "Muhammad Irsad Arrasy Akbar", "Muhammad Narda Nafis", "Muhammad Rio Shafwan", "Nila Khairunnisa", "Putu Raditya Sugiantara", "Rafi Nakhlah Arkana", "Rafif Jalu Fajar Adhinoto", "Rifa Lathifah", "Rizkia Dwi Ariani", "Septiana Putri Ramadhani", "Shania Aulia Putri", "Syafiah Ordelia", "Tegep Kokoh Setyoharsanto"],
+    "XII 2": ["Abid Dama Hestubryanto", "Abidzar Alghifari Fachri Ramadin", "Abinaya Zahran", "Anindya Ramadhani", "Anisa Xanzany", "Athallah Vanayubi Bachtiar", "Avrilia Karunia Kasih", "Calvin Julio Aditya Mansyur", "Cantya Aprila", "Dina Nur Fitria", "Eshan Dzaki Widodo", "Faiza Hasna Danish Ara", "Fasya Ghani Pratama", "Ghisa Aufa Rahma", "Janeeta Rafni Maisun", "Lana Kartika Putri", "M. Azka Zaisurrahman. H", "Malika Az-Zahrani", "Muhamad Fariz Aidin", "Muhammad Ardha Alfattah", "Muhammad Fadhil", "Muhammad Iqbal", "Muhammad Kanzzaky Ramadhan", "Muhammad Radithya Ahza Ramadhan", "Naufa Nabiha Wahyudi", "Prita Manohara", "Putri Shifa Ramadhani", "Quentien Zikra Meilano", "Rayyan Alfatih Widyanto", "Raziq Arkana Yadira", "Shafira Nur Maidah", "Shavira Rainiyuma Putria", "Theo Dwisadewo", "Vionna Tri Cahya", "Yona Falentina Putri", "Zaidan Akmal Darmawan Handono"],
+    "XII 3": ["Abdul Haris Jamalul Akbar", "Adam Adiatma", "Aisyah Idmi Safitri", "Ananda Putra Raffa", "Andika Chandra", "Annisa Dwi Ariani Nugroho", "Ardis Rayhan Alghifari", "Arya Muhafiz Fatah Kusuma", "Azizah Putri Oktaviani", "Carinna Beatricia Sinaga", "Deshan Izzanullah Wardhana", "Deshita Nabila", "Dhesinta Putri Ramadani", "Dindra Ro`afa Wa`afiha", "Fahreza Akbar", "Fikraam Al Rabbani", "Gabriella Immanuel Paulina", "Galang Ramadhan", "Hera Pitriani", "Jasmine Dalila Deigratia", "Juliesta Putrisya Bilkis Sutas", "Luby Qiansyah", "Luluh Agni Pambudi", "Muhammad Abyan Saputra", "Muhammad Rafa Taqiuddin", "Muhammad Safaraz Ananto", "Nadine Putri Ramadhani", "Naira Idelia", "Namira Alexandra Juniandari", "Nane Nandya", "Nayla Ayudita Setiawan", "Qaiz Aisyah Lutfiah", "Reihan Elza Akbar", "Reza Nathan Putra", "Rifdah Diena Faiha"],
+    "XII 4": ["Adis Aulia Arani", "Agna Salsabilah", "Almira Kirana", "Andhini Putri Prameswari", "Azahra Aulia", "Chintya Librawati Nauli Sitorus", "Eka Dewi Ummaroh", "Faith Nabhan Rafif", "Friska Febriyanti", "Jauza Labibah Prasetyo", "Keira Aurely Fajri", "Keisya Aulia Nurmaulida", "Khairin Aqilah", "Khumairah K. Yasim", "Kiara Azalea Yuditya", "Kristian Nur Triyuda Gunawan", "Mahalia Khaisar", "Muhammad Ardana Ajibrata", "Nadya Kamila Rahma Prasetya", "Nazwa Aulia", "Ninda Maulida", "Qonita Sahda Najmi", "Queen Azizah Hasibuan", "RA. Karina Latifasya", "Rachel Amanda Qurratu Aini", "Raffa Fadillah Ramadan", "Rafisyah Chairullah", "Rezza Meysila Kirana", "Rhefina Dwi Irawan", "Rima Lutfiana", "Sakinah Dwi Almira", "Satrio Gungsawabe Malik A`raf", "Syaikhah Nabila Atmaja", "Widiatul Azzira", "Zahra Nur Afifah"],
+    "XII 5": ["Abrisam Kisra Grenada", "Almira Aprilia", "Ardan Syahrial", "Arrad Bihamdi Ahnaf", "Aulia Fitria Maharani", "Aulia Raafi Muhammad", "Aurel Tiara Naghifa", "Ayu Putri Juliyanti", "Beauty Nurish Al Shafier Apriyanto", "Burhan Labib", "Chanaya Pratiwi", "Elizabeth Reminchere Rumahorbo", "Feiz Husain Muhammadi", "Godi Kanaka", "Hasna Malika Afanin", "Izzati Maharani Jumarnis", "Khansa Khairun Nisa", "Khansa Ufairah Wafiyah", "Kheiza Aqilah El Salim", "Kirana Khairunnisa", "Labibah Nawar Fazev", "Meidelia Adzani", "Muhammad Farel", "Muhammad Almer Jamail", "Nadia Chairani", "Nayla Azzahira Husna", "Raisah Wijaya", "Ratu Keysa Aira", "Revina Zakiyah Rahman", "Riza Al Hilal", "Salsa Amanda", "Salsabila Nadhifa Aqila", "Shabrina Ali", "Syila Maulidina Agatha", "Talita Surya Febriyanti", "Vanessa Aleyda Sanipan"],
+    "XII 6": ["Afrina Filza Birrul Walidain", "Aisyah Leylani Azra Ibrahim", "Alan Arif Fianto", "Alfia Citra Humaira", "Amanda Silva", "Ardjeta Aurelia Az Zahra", "Cahaya Mentari Kusumawardhani", "Dendy Sktiadji", "Devilia Setiawan", "Dhara Azahra", "Fadhli Albar Alqawi", "Hilmi Kayla", "Humaira Putri Yusuf", "Imel", "Joshua Luther Sitohang", "Keisya Aulia", "Khansa", "Khumairah Auliani", "Muhamad Messi Junior", "Muhammad Fahrizal Umroni", "Muhammad Fakhri Atallah", "Muhammad Firdaus", "Naura Ardisya Almasyefa", "Nayra Maharani Putri", "Noval Destin Rahmawan", "Putri Indriani Santoso", "Reivan Yusmana Putra", "Rofi Waliya", "Sekar Ramadhani Kurniawan", "Septian Dermawan", "Suci Rahmawati", "Syavira Azalea Putri", "Tiara Putri Sahara", "Vera Tri Okta Nabila", "Zavala Yuja Putra Kusuma"],
+    "XII 7": ["Aira Juliana Jasmine", "Alyska Dwi Cahyaningsih", "Angel Maulida", "Anishatun Zahra Pratiwi", "Arya Abimanyu Putra Nugroho", "Cinta Mutiara Meisya", "Dava Ipnu Firdauz", "Dewangga Abimanyu Daniswara", "Fadhil Tsari Akbar", "Fatima Listiani Heriwanto", "Fazza Rizqullah", "Feral Alviro Ramadhan", "Ghaitsa Alya Gunawan", "Kazalfa Abdi Mersa", "Malica Zibriliya", "Muhamad Paisal", "Muhammad Dendi", "Mutasim Bilah", "Nabila Alya Manda", "Nashita Hayfa Calyaputri", "Nawra Ghania Irawan", "Naysyila Dhea Mutia", "Nova Nur Azijah", "Pevita Efelyn", "Qotrun Syafaatul Ibad", "Raditya Dany Pratama", "Ranum Shafa Apriyanthi", "Reysya Rizky Almaghfira", "Surya Putra Lesmana", "Syifa Latifa Putri", "Tiara Annisa Nur", "Viona Amanda", "Yoga Hermawan", "Yulia Nasila"],
+    "XII 8": ["Almeera Syifa Setiawan", "Alqian Syahputra", "Anissa Nur Basith", "Aurellia Satya Putri Maharani", "Azhar Hapizal", "Charissa Putri Lesmana", "Dena Analisi", "Destiara Putri", "Dzaky Ilham Setiawan", "Fahri Pratama", "Fina Ayudia", "Ghifari Fitria Sari", "Hanaya Futri", "Keylla Putri Malika", "Khansa Aulia", "Khanza Desnadi Mumtazah", "Lesti Aima Nur Aisyah", "Muhammad Azis Fahmi", "Muhammad Bintang Sanubari", "Muhammad Faizh Fachrizha", "Muhammad Febrian", "Muhammad Ijlal Ghaniy", "Nabila Zahra Tusihta", "Nadia Sufi Alfazhia", "Natasya Maulana Putri", "Nur Ajizah", "Puspa Azri Khanzaniar", "Putra Alfiansyah Wijaya", "Rafi`ul Ilham", "Raka Radiansyah", "Rendra Adrian Setiawan", "Reza Alamsah Alfajri", "Salsa Dwi Fadhilah Sari", "Shafa Meilaney", "Syiva Ramadhani Harahap"],
+    "XII 9": ["Ahmad Fauzan", "Al Maulidi Fiqri Ardinsyah", "Alya Aura Wahyuni", "Angga Nurdiansyah", "Anisa Mutiara Salvia", "Astrita Sari Dewi", "Bhady Haidar", "Cahaya Lestari Sanusi", "Chiko Alpariz", "Elsa Ramadani", "Evan Alviano", "Fajar Adam Shodiqin", "Jihan Ramadani", "Keysa Nur Dwi Alfiani", "Khezya Azka Assyfa", "Maida Alawiyah", "Melodia Latifa Qolbi", "Muhammad Aqso Hayandra", "Muhammad Bivan Kusuma", "Muhammad Fathan Almair Zafar", "Muhammad Rizqy Khairy Zsahka", "Nanang Kardian", "Naura Malika Adzani", "Nur Rahcayani", "Pinza Aulia Putri", "Rakha Sena Prasetya", "Regie Januarillio Pratama", "Rodatul Janah", "Sabitah Sya`wa Azura", "Shafwan Zahran", "Syahwa Oktavia", "Syfa Fauziah Maryati", "Tanisya Tri Agustin", "Zaskia Khairunisa"]
+  };
+
+  let selectedAnggotaArray = [];
+  let globalContentData = [];
+  let currentFasilitator = "";
+
+  // SCRIPT FITUR KETUK RAHASIA (3 KALI KETUK DI AREA KOSONG)
+  let tapCount = 0;
+  let tapTimer = null;
+
+  function handleSecretTap(e) {
+    // Dipastikan DILUAR elemen interaktif & teks (card, button, link, input, h2, p, i)
+    if (e.target.closest('.menu-card') || 
+        e.target.closest('button') || 
+        e.target.closest('a') || 
+        e.target.closest('input') ||
+        e.target.closest('.page-title') ||
+        e.target.closest('p') ||
+        e.target.closest('h4') ||
+        e.target.closest('i')) {
+      return;
+    }
+
+    tapCount++;
+
+    if (tapTimer) clearTimeout(tapTimer);
+
+    // Reset hitungan jika jeda antar ketukan lebih dari 800ms
+    tapTimer = setTimeout(() => {
+      tapCount = 0;
+    }, 800);
+
+    // Jika berhasil mengetuk 3 kali cepat di area kosong Halaman Menu
+    if (tapCount >= 3) {
+      tapCount = 0;
+      clearTimeout(tapTimer);
+      const btnFasil = document.getElementById('btnFasilitatorSecret');
+      if (btnFasil) {
+        btnFasil.classList.toggle('hidden-btn');
+      }
+    }
+  }
+
+  window.onload = function() {
+    initDropdowns();
+  };
+
+  function navigateTo(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+    
+    // Setiap kali meninggalkan menu, sembunyikan kembali tombol fasilitator
+    if (pageId !== 'page-menu') {
+      const btnFasil = document.getElementById('btnFasilitatorSecret');
+      if (btnFasil) btnFasil.classList.add('hidden-btn');
+    }
+
+    window.scrollTo(0, 0);
+  }
+
+  function initDropdowns() {
+    const fasilSelect = document.getElementById('loginFasilitatorNama');
+    fasilSelect.innerHTML = '<option value="">-- Pilih Nama Fasilitator --</option>';
+    FASILITATOR_LIST.forEach(f => {
+      fasilSelect.innerHTML += `<option value="${f}">${f}</option>`;
+    });
+
+    const kelasSelect = document.getElementById('uploadKelas');
+    const filterKelas = document.getElementById('filterKelasFasilitator');
+    
+    kelasSelect.innerHTML = '<option value="">-- Pilih Kelas --</option>';
+    filterKelas.innerHTML = '<option value="">-- Silakan Pilih Kelas --</option>';
+
+    Object.keys(DATA_MURID).forEach(k => {
+      kelasSelect.innerHTML += `<option value="${k}">${k}</option>`;
+      filterKelas.innerHTML += `<option value="${k}">${k}</option>`;
+    });
+  }
+
+  function handleKelasChange() {
+    const kelas = document.getElementById('uploadKelas').value;
+    selectedAnggotaArray = [];
+    renderSelectedAnggota();
+    renderAvailableSiswa(kelas);
+  }
+
+  function renderAvailableSiswa(kelas) {
+    const container = document.getElementById('availableSiswaContainer');
+    container.innerHTML = '';
+
+    if (!kelas || !DATA_MURID[kelas]) {
+      container.innerHTML = '<span class="text-muted small fw-normal">Silakan pilih kelas terlebih dahulu.</span>';
+      return;
+    }
+
+    DATA_MURID[kelas].forEach(nama => {
+      if (!selectedAnggotaArray.includes(nama)) {
+        const chip = document.createElement('span');
+        chip.className = 'student-chip';
+        chip.innerHTML = `<i class="fa-solid fa-plus me-1"></i> ${nama}`;
+        chip.onclick = () => selectSiswa(nama);
+        container.appendChild(chip);
+      }
+    });
+
+    if (container.children.length === 0) {
+      container.innerHTML = '<span class="text-muted small fw-normal">Semua siswa kelas ini telah dipilih.</span>';
+    }
+  }
+
+  function selectSiswa(nama) {
+    if (!selectedAnggotaArray.includes(nama)) {
+      selectedAnggotaArray.push(nama);
+      const kelas = document.getElementById('uploadKelas').value;
+      renderSelectedAnggota();
+      renderAvailableSiswa(kelas);
+    }
+  }
+
+  function removeSiswa(nama) {
+    selectedAnggotaArray = selectedAnggotaArray.filter(item => item !== nama);
+    const kelas = document.getElementById('uploadKelas').value;
+    renderSelectedAnggota();
+    renderAvailableSiswa(kelas);
+  }
+
+  function renderSelectedAnggota() {
+    const container = document.getElementById('selectedAnggotaContainer');
+    container.innerHTML = '';
+
+    if (selectedAnggotaArray.length === 0) {
+      container.innerHTML = '<span class="text-muted small fw-normal" id="emptyAnggotaPlaceholder">Klik nama murid dari daftar di bawah untuk menambahkannya ke sini...</span>';
+      return;
+    }
+
+    selectedAnggotaArray.forEach(nama => {
+      const chip = document.createElement('span');
+      chip.className = 'student-selected-chip';
+      chip.innerHTML = `${nama} <i class="fa-solid fa-circle-xmark btn-remove" onclick="removeSiswa('${nama.replace(/'/g, "\\'")}')"></i>`;
+      container.appendChild(chip);
+    });
+  }
+
+  function handleUploadSubmit(e) {
+    e.preventDefault();
+    const btnSubmit = document.getElementById('btnSubmitUpload');
+    const kelas = document.getElementById('uploadKelas').value;
+    const kelompok = document.getElementById('uploadKelompok').value;
+    const judul = document.getElementById('uploadJudul').value;
+    const link = document.getElementById('uploadLink').value;
+
+    if (selectedAnggotaArray.length === 0) {
+      alert("Harap pilih minimal satu nama anggota kelompok!");
+      return;
+    }
+
+    btnSubmit.disabled = true;
+    btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i> Mengirim...';
+
+    const payload = {
+      action: 'upload',
+      kelas: kelas,
+      kelompok: kelompok,
+      anggota: selectedAnggotaArray.join(', '),
+      judul: judul,
+      link: link
+    };
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(res => {
+      if(res.status === 'success') {
+        alert("Konten berhasil diunggah dan tersimpan ke Spreadsheet!");
+        document.getElementById('formUpload').reset();
+        selectedAnggotaArray = [];
+        renderSelectedAnggota();
+        renderAvailableSiswa('');
+        navigateTo('page-menu');
+      } else {
+        alert("Gagal menyimpan: " + res.message);
+      }
+    })
+    .catch(err => {
+      alert("Terjadi kesalahan jaringan/koneksi: " + err);
+    })
+    .finally(() => {
+      btnSubmit.disabled = false;
+      btnSubmit.innerText = 'Kirim Konten';
+    });
+  }
+
+  function handleLoginFasilitator(e) {
+    e.preventDefault();
+    const nama = document.getElementById('loginFasilitatorNama').value;
+    const sandi = document.getElementById('loginSandi').value;
+
+    if (sandi !== "@konten10") {
+      alert("Sandi fasilitator salah!");
+      return;
+    }
+
+    currentFasilitator = nama;
+    document.getElementById('welcomeFasilitator').innerText = `Selamat Datang, ${nama}`;
+    document.getElementById('filterKelasFasilitator').value = "";
+    
+    navigateTo('page-dashboard-fasilitator');
+    fetchDashboardData();
+  }
+
+  function handleLogout() {
+    currentFasilitator = "";
+    const formLogin = document.getElementById('formLoginFasilitator');
+    if (formLogin) {
+      formLogin.reset();
+    }
+    document.getElementById('loginFasilitatorNama').value = "";
+    document.getElementById('loginSandi').value = "";
+    
+    navigateTo('page-menu');
+  }
+
+  function fetchDashboardData() {
+    const container = document.getElementById('daftarKontenContainer');
+    container.innerHTML = '<p class="text-center text-muted"><i class="fa-solid fa-spinner fa-spin me-2"></i> Memuat data karya siswa...</p>';
+
+    fetch(SCRIPT_URL)
+    .then(res => res.json())
+    .then(data => {
+      globalContentData = data;
+      renderKontenList();
+    })
+    .catch(err => {
+      container.innerHTML = '<p class="text-center text-danger">Gagal memuat data: ' + err + '</p>';
+    });
+  }
+
+  function renderKontenList() {
+    const container = document.getElementById('daftarKontenContainer');
+    const selectedKelas = document.getElementById('filterKelasFasilitator').value;
+    container.innerHTML = '';
+
+    if (!selectedKelas) {
+      container.innerHTML = `
+        <div class="text-center text-muted py-4">
+          <i class="fa-solid fa-arrow-up fs-3 mb-2 text-indigo-500"></i>
+          <p class="fw-bold mb-0">Silakan pilih kelas terlebih dahulu pada dropdown di atas untuk melihat karya siswa.</p>
+        </div>
+      `;
+      return;
+    }
+
+    const filtered = globalContentData.filter(item => item.kelas === selectedKelas);
+
+    if (filtered.length === 0) {
+      container.innerHTML = '<p class="text-center text-muted fw-bold py-4">Belum ada konten yang diunggah untuk kelas ini.</p>';
+      return;
+    }
+
+    filtered.forEach((item) => {
+      const card = `
+        <div class="card-glass mb-3">
+          <div class="row align-items-center">
+            <div class="col-md-8">
+              <h5 class="title-gradient fw-bold">${item.judul}</h5>
+              <p class="mb-1 text-slate-700"><strong>Kelas:</strong> ${item.kelas} | <strong>Kelompok:</strong> ${item.kelompok}</p>
+              <p class="mb-1 text-slate-700"><strong>Anggota:</strong> ${item.anggota}</p>
+              <p class="mb-0 text-muted"><small>Penilai: <strong>${item.fasilitator || '-'}</strong> | Nilai: Akurasi (${item.nilaiAkurasi || '-'}), Kreativitas (${item.nilaiKreativitas || '-'}), Teknis (${item.nilaiTeknis || '-'}), Bahasa (${item.nilaiKomunikasi || '-'})</small></p>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+              <button class="btn btn-custom btn-sm" onclick="openPenilaianModal(${item.rowIndex}, '${item.link}', '${item.nilaiAkurasi}', '${item.nilaiKreativitas}', '${item.nilaiTeknis}', '${item.nilaiKomunikasi}')">
+                <i class="fa-solid fa-play me-1"></i> Tonton & Nilai
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      container.innerHTML += card;
+    });
+  }
+
+  function openPenilaianModal(rowIndex, link, akurasi, kreativitas, teknis, komunikasi) {
+    document.getElementById('penilaianRowIndex').value = rowIndex;
+    document.getElementById('modalVideoLink').href = link;
+    document.getElementById('nilaiAkurasi').value = akurasi || 'B';
+    document.getElementById('nilaiKreativitas').value = kreativitas || 'B';
+    document.getElementById('nilaiTeknis').value = teknis || 'B';
+    document.getElementById('nilaiKomunikasi').value = komunikasi || 'B';
+
+    const modal = new bootstrap.Modal(document.getElementById('modalPenilaian'));
+    modal.show();
+  }
+
+  function handleSavePenilaian(e) {
+    e.preventDefault();
+    const btnSubmit = document.getElementById('btnSubmitPenilaian');
+    btnSubmit.disabled = true;
+    btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i> Menyimpan...';
+
+    const payload = {
+      action: 'penilaian',
+      rowIndex: document.getElementById('penilaianRowIndex').value,
+      fasilitator: currentFasilitator,
+      akurasi: document.getElementById('nilaiAkurasi').value,
+      kreativitas: document.getElementById('nilaiKreativitas').value,
+      teknis: document.getElementById('nilaiTeknis').value,
+      komunikasi: document.getElementById('nilaiKomunikasi').value
+    };
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(res => {
+      if(res.status === 'success') {
+        const modalEl = document.getElementById('modalPenilaian');
+        const modal = bootstrap.Modal.getInstance(modalEl);
+        modal.hide();
+        fetchDashboardData();
+      } else {
+        alert("Gagal menyimpan: " + res.message);
+      }
+    })
+    .catch(err => {
+      alert("Gagal menyimpan penilaian: " + err);
+    })
+    .finally(() => {
+      btnSubmit.disabled = false;
+      btnSubmit.innerText = 'Simpan Penilaian';
+    });
+  }
+</script>
+</body>
+</html>
